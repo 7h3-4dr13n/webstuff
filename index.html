@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Matrix-style on white theme */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #008f11; 
+            font-family: 'Courier New', Courier, monospace;
+            /* Hard pixel height for Blackboard stability */
+            height: 500px;
+            min-height: 100%;
+        }
 
+        .noir-wrapper {
+            padding: 40px 30px;
+            box-sizing: border-box;
+            max-width: 850px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #output {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 17px;
+            line-height: 1.6;
+            display: inline;
+            font-weight: bold;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #00FF00; /* Bright lime cursor */
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        #skip-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: transparent;
+            color: #008f11;
+            border: 1px solid #008f11;
+            padding: 5px 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        #skip-btn:hover {
+            color: #00FF00;
+            border-color: #00FF00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(200,255,200,0) 0%, rgba(0,255,0,0.05) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <div class="noir-wrapper">
+        <button id="skip-btn" onclick="skipAnimation()">[ Skip Animation ]</button>
+        <span id="output"></span><span id="cursor" class="cursor"></span>
+    </div>
+
+    <script>
+        (function() {
+            const textToType = `EXECUTIVE SUMMARY: WHAT YOU NEED TO REMEMBER
+
+To graduate, you need to write a capstone report on a strategic topic.
+The topic should be on a question that is meaningful and strategic to you, something that explores a new horizon, a place where business as usual is unlikely to sustain.
+
+You need to turn in a final think piece (6 to 8,000 words) that addresses that question and that will showcase your work and your brand name.
+
+You'll be graded on:
+• The quality of your final deliverable
+• The quality of your issue statement
+• The quality of the feedback you give to others
+• Participation in the class and online activities as well as attendance during the seminars`;
+
+            const output = document.getElementById('output');
+            const cursor = document.getElementById('cursor');
+            const skipBtn = document.getElementById('skip-btn');
+            
+            let i = 0;
+            const speed = 35;
+            let isSkipped = false;
+
+            window.skipAnimation = function() {
+                isSkipped = true;
+                output.textContent = textToType; 
+                skipBtn.style.display = 'none';
+                // Cursor is NOT hidden here anymore
+            };
+
+            function type() {
+                if (isSkipped) return; 
+
+                if (i < textToType.length) {
+                    output.textContent += textToType.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Only hide the button when finished naturally
+                    skipBtn.style.display = 'none';
+                }
+            }
+
+            type();
+        })();
+    </script>
+</body>
+</html>
